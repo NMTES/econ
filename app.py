@@ -3,11 +3,19 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
-import io
+
+# Asegurar que seaborn esté instalado
+try:
+    import seaborn as sns
+except ImportError:
+    import subprocess, sys
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "seaborn"])
+    import seaborn as sns
+
+sns.set(style="whitegrid")  # Mejora visual
 
 st.set_page_config(page_title="Análisis Macroeconómico", layout="wide")
 st.title("📊 Análisis de inflación, tipo de cambio y EMAE")
