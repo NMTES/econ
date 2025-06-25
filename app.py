@@ -6,15 +6,6 @@ import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge, Lasso
 from sklearn.metrics import mean_squared_error, r2_score
-def st_justified(text):
-    st.markdown(
-        f"""
-        <div style='text-align: justify; margin: 10px 0px; font-size: 16px; line-height: 1.6'>
-            {text}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
 st.title("Analisis de TCR, TURISMO e IMPORTACIONES.")
 st.markdown("*Realizado por Nicolás Marcelo Toniolo.*")
@@ -102,7 +93,7 @@ try:
     fig1.tight_layout()
     st.pyplot(fig1)
 
-    st.st_justified("""
+    st.markdown("""
     Este gráfico muestra la evolución del Tipo de Cambio Real (TCR) bilateral entre Argentina y Brasil, con base enero 2019 = 100. Cuanto más alto es este índice, más competitiva se vuelve Argentina respecto a Brasil (es decir, los precios argentinos son más bajos en relación a los brasileños, facilitando las exportaciones y atrayendo turismo). Cuando el TCR cae, como a fines de 2023 y en 2024, Argentina se vuelve más cara en términos relativos, lo cual podría desalentar el turismo receptivo desde Brasil.""")
 
     # --- TURISMO ---
