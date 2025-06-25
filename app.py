@@ -88,7 +88,7 @@ try:
     fig1, ax1 = plt.subplots(figsize=(12, 5))
     ax1.plot(df_tcr['Fecha'], df_tcr['TCR_indice'], label="TCR Bilateral", color="blue")
     ax1.set_title("Índice del Tipo de Cambio Real Bilateral (Argentina - Brasil)")
-    ax1.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC, IBGE, entre otros.", fontsize=9, color='gray')
+    fig1.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC, IBGE, entre otros.", fontsize=9, color='gray')
     ax1.set_ylabel("Índice (Base Ene-2019 = 100)")
     ax1.grid(True)
     fig1.tight_layout()
