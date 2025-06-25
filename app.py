@@ -86,7 +86,6 @@ try:
     ax1.set_title("Índice del Tipo de Cambio Real Bilateral (Argentina - Brasil)")
     ax1.set_ylabel("Índice (Base Ene-2019 = 100)")
     ax1.grid(True)
-    ax1.legend()
     fig1.tight_layout()
     st.pyplot(fig1)
 
@@ -205,7 +204,6 @@ try:
     ax1.plot(df["Fecha"], df["Consumo_Desest"], label="Consumo Desestacionalizado")
     ax1.set_title("Índices Desestacionalizados (2004-2025)")
     ax1.grid(True)
-    ax1.legend()
     st.pyplot(fig1)
 
     # --- EMAE ---
@@ -242,7 +240,6 @@ try:
     ax2.set_title("Variaciones mensuales desestacionalizadas")
     ax2.axhline(0, color="gray")
     ax2.grid(True)
-    ax2.legend()
     st.pyplot(fig2)
 
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
@@ -273,7 +270,6 @@ try:
     ax3.set_xlabel("EMAE Δ%")
     ax3.set_ylabel("Piezas Δ%")
     ax3.grid(True)
-    ax3.legend()
     st.pyplot(fig3)
 
     # --- Correlación anual ---
@@ -292,7 +288,6 @@ try:
     ax4.axhline(0, color="gray")
     ax4.grid(True)
     ax4.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
-    ax4.legend()
     st.pyplot(fig4)
 
 
