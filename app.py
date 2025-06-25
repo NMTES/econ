@@ -431,6 +431,11 @@ try:
     ax7.set_ylabel("Bienes Δ%")
     st.pyplot(fig7)
 
+    st.header("Conclusion")
+    st.markdown(""" El presente trabajo aporta evidencia empírica sobre dos dimensiones relevantes de la economía argentina: la influencia del tipo de cambio real bilateral sobre el saldo turístico, y la relación entre el nivel de actividad económica (EMAE) y las importaciones de bienes.
+    En el primer caso, se constató una correlación positiva entre el TCR y el saldo turístico, con resultados robustos tanto mensuales como anuales. En el segundo, se encontró que las importaciones (particularmente de piezas e insumos) presentan una dinámica procíclica respecto al EMAE.
+    Si bien los coeficientes de determinación no son elevados —lo que sugiere la presencia de múltiples factores adicionales— los modelos utilizados permiten concluir que tanto la competitividad cambiaria como la actividad agregada influyen de forma significativa en variables reales del comercio y el turismo.
+    """)
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
