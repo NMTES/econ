@@ -224,14 +224,6 @@ try:
     df_emae["Fecha"] = pd.to_datetime(dict(year=df_emae["Año"], month=df_emae["Mes_num"], day=1), errors='coerce')
     df_emae = df_emae[df_emae["Fecha"].notna()].sort_values("Fecha").reset_index(drop=True)
 
-    # --- Merge e indicadores ---
-    df_merged = pd.merge(df, df_emae[["Fecha", "Var_mensual_desest"]], on="Fecha", how="inner")
-    df_merged.rename(columns={"Var_mensual_desest": "Var_EMAE"}, inplace=True)
-    corr_piezas = df_merged[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    corr_consumo = df_merged[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    st.write(f"📈 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
-    st.write(f"📈 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
-
     # --- Gráfico de variaciones ---
     fig2, ax2 = plt.subplots(figsize=(10, 4))
     ax2.plot(df_merged["Fecha"], df_merged["Var_EMAE"], label="EMAE Δ%", color="black")
@@ -241,6 +233,14 @@ try:
     ax2.axhline(0, color="gray")
     ax2.grid(True)
     st.pyplot(fig2)
+    
+    # --- Merge e indicadores ---
+    df_merged = pd.merge(df, df_emae[["Fecha", "Var_mensual_desest"]], on="Fecha", how="inner")
+    df_merged.rename(columns={"Var_mensual_desest": "Var_EMAE"}, inplace=True)
+    corr_piezas = df_merged[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    corr_consumo = df_merged[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    st.write(f"📈 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
+    st.write(f"📈 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
 
@@ -272,15 +272,7 @@ try:
     ax3.grid(True)
     st.pyplot(fig3)
 
-    # --- Correlación anual ---
-    df_merged["Año"] = df_merged["Fecha"].dt.year
-    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
-    corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
-    st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
-
-    # --- Gráfico anual ---
+        # --- Gráfico anual ---
     fig4, ax4 = plt.subplots(figsize=(8, 4))
     ax4.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
     ax4.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
@@ -289,7 +281,14 @@ try:
     ax4.grid(True)
     ax4.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
     st.pyplot(fig4)
-
+    
+    # --- Correlación anual ---
+    df_merged["Año"] = df_merged["Fecha"].dt.year
+    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
+    corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
+    st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
