@@ -388,46 +388,6 @@ try:
     Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa, **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual. Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
 
-    # Regresión anual: Piezas vs EMAE
-    X_piezas_anual = df_anual[["Var_EMAE"]].values
-    y_piezas_anual = df_anual["Var_Piezas_Desest"].values
-    modelo_piezas_anual = LinearRegression().fit(X_piezas_anual, y_piezas_anual)
-    
-    coef_piezas_anual = modelo_piezas_anual.coef_[0]
-    intercepto_piezas_anual = modelo_piezas_anual.intercept_
-    pred_piezas_anual = modelo_piezas_anual.predict(X_piezas_anual)
-    r2_piezas_anual = r2_score(y_piezas_anual, pred_piezas_anual)
-    rmse_piezas_anual = mean_squared_error(y_piezas_anual, pred_piezas_anual) ** 0.5
-    
-    # Regresión anual: Consumo vs EMAE
-    X_consumo_anual = df_anual[["Var_EMAE"]].values
-    y_consumo_anual = df_anual["Var_Consumo_Desest"].values
-    modelo_consumo_anual = LinearRegression().fit(X_consumo_anual, y_consumo_anual)
-    
-    coef_consumo_anual = modelo_consumo_anual.coef_[0]
-    intercepto_consumo_anual = modelo_consumo_anual.intercept_
-    pred_consumo_anual = modelo_consumo_anual.predict(X_consumo_anual)
-    r2_consumo_anual = r2_score(y_consumo_anual, pred_consumo_anual)
-    rmse_consumo_anual = mean_squared_error(y_consumo_anual, pred_consumo_anual) ** 0.5
-
-    # Gráfico de dispersión con línea de regresión: Piezas
-    fig6, ax6 = plt.subplots(figsize=(6, 5))
-    ax6.scatter(X_piezas_anual, y_piezas_anual, color="dodgerblue", alpha=0.7, label="Datos anuales")
-    ax6.plot(X_piezas_anual, pred_piezas_anual, color="black", label="Regresión")
-    ax6.set_title("Regresión anual: Piezas y accesorios Δ% vs EMAE Δ%")
-    ax6.set_xlabel("EMAE Δ%")
-    ax6.set_ylabel("Piezas Δ%")
-    st.pyplot(fig6)
-    
-    # Gráfico de dispersión con línea de regresión: Consumo
-    fig7, ax7 = plt.subplots(figsize=(6, 5))
-    ax7.scatter(X_consumo_anual, y_consumo_anual, color="darkorange", alpha=0.7, label="Datos anuales")
-    ax7.plot(X_consumo_anual, pred_consumo_anual, color="black", label="Regresión")
-    ax7.set_title("Regresión anual: Bienes de consumo Δ% vs EMAE Δ%")
-    ax7.set_xlabel("EMAE Δ%")
-    ax7.set_ylabel("Bienes Δ%")
-    st.pyplot(fig7)
-
 
     
     # RIDGE - Piezas vs EMAE
