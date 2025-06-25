@@ -9,6 +9,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 st.set_page_config(page_title="TCR y Turismo", layout="wide")
 
 st.title("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
+st.subtitle("Realizado por Nicolás Marcelo Toniolo")
 
 st.markdown("""
 En este apartado nos proponemos analizar la evolución del tipo de cambio real bilateral entre Argentina y Brasil y explorar su posible relación con el saldo turístico de Argentina. El objetivo es comprender si las variaciones en la competitividad cambiaria influyen en los flujos turísticos.
@@ -131,8 +132,8 @@ try:
     
     1. La **línea azul** muestra el **TCR** que ya explicamos antes (si Argentina está más barata o más cara que Brasil).
     2. La **línea roja** muestra el **saldo turístico**, que es la diferencia entre:
-       - La cantidad de brasileños que vienen a hacer turismo en Argentina.
-       - Y la cantidad de argentinos que viajan a Brasil.
+       - La cantidad de turistas que ingresan a Argentina.
+       - Y la cantidad de argentinos que viajan al exterior.
     
     Si la línea roja está por debajo de cero, significa que **más argentinos están viajando a Brasil que brasileños viniendo a Argentina**.
     
