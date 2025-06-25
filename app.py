@@ -255,12 +255,7 @@ try:
     st.pyplot(fig1)
 
     st.markdown("""
-    
-    Se comparan:
-    
-    - **Importaciones de piezas** (línea azul)
-    - **Importaciones de bienes de consumo** (línea naranja)
-    
+    Se puede observar:
     Ambas líneas tienden a subir cuando la economía crece y a caer en períodos de crisis (por ejemplo, en 2009, 2018 y 2020).  
     Las importaciones de piezas muestran una respuesta más fuerte a los ciclos económicos, lo que sugiere que están ligadas a la producción.
     """)
@@ -298,19 +293,9 @@ try:
     ax2.legend()
     st.pyplot(fig2)
 
-    st.markdown("""#### 📉 Gráfico inferior: Variaciones mensuales desestacionalizadas
-
+    st.markdown("""
     Este gráfico muestra cómo cambian mes a mes las importaciones y el EMAE.  
     Aunque hay mucha variabilidad, se observa que cuando la economía sube, las importaciones también tienden a subir, y viceversa.
-    
-    ---
-    
-    - 📦 Piezas vs EMAE: **0.284**
-    - 🛒 Consumo vs EMAE: **0.250**
-    
-    Esto indica que existe una **relación positiva**, aunque **no muy fuerte**, entre la actividad económica y las importaciones.
-    
-    ---
     
     - Las importaciones tienden a acompañar los ciclos económicos: crecen cuando la economía crece y caen cuando hay recesión.
     - Las importaciones de **piezas** reaccionan con más fuerza y podrían usarse como **indicador temprano de actividad industrial**.
