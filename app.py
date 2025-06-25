@@ -272,7 +272,11 @@ try:
     ax3.grid(True)
     st.pyplot(fig3)
 
-        # --- Gráfico anual ---
+    # --- Gráfico anual ---
+    df_merged["Año"] = df_merged["Fecha"].dt.year
+    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
+    corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
     fig4, ax4 = plt.subplots(figsize=(8, 4))
     ax4.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
     ax4.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
@@ -283,10 +287,6 @@ try:
     st.pyplot(fig4)
     
     # --- Correlación anual ---
-    df_merged["Año"] = df_merged["Fecha"].dt.year
-    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
-    corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
     st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
     st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
 
