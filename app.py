@@ -126,7 +126,6 @@ try:
     st.pyplot(fig2)
 
     st.markdown("""
-    ### 🌍 ¿Qué muestra este gráfico?
     
     Este gráfico compara dos cosas distintas pero relacionadas:
     
@@ -139,16 +138,12 @@ try:
     
     ---
     
-    ### 🔍 ¿Qué podemos ver?
-    
     - Cuando el **TCR sube** (Argentina se vuelve más barata), el saldo turístico mejora: vienen más brasileños o viajan menos argentinos.
     - Cuando el **TCR baja** (Argentina se vuelve más cara), el saldo turístico empeora: se van más argentinos a Brasil y vienen menos turistas brasileños.
     
     Esto sugiere que **el precio relativo entre los dos países influye en las decisiones de viaje**.
     
     ---
-    
-    ### 📊 ¿Qué dicen los números?
     
     Hicimos algunos cálculos para ver si esta relación es real:
     
@@ -162,13 +157,9 @@ try:
     
     ---
     
-    ### ✅ Conclusión simple
-    
-    Cuando Argentina está más barata que Brasil, es más probable que vengan turistas brasileños y que menos argentinos crucen la frontera para vacacionar.  
+    Cuando Argentina está más barata que Brasil, es más probable que vengan turistas y que menos argentinos crucen la frontera para vacacionar.  
     El **tipo de cambio real influye** en el turismo, aunque también hay otros factores como los ingresos, las restricciones para viajar, o incluso el clima.
     """)
-
-
     
     # --- Correlación de Pearson ---
     corr_pearson = df_completo[["TCR_indice", "Saldo"]].corr().iloc[0, 1]
