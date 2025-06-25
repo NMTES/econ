@@ -15,17 +15,18 @@ Esta app visualiza la evolución del **tipo de cambio real bilateral Argentina-B
 Los datos provienen de fuentes oficiales como INDEC, IBGE, entre otros.
 """)
 
-# --- Carga de archivos ---
-st.sidebar.header("📂 Carga de archivos")
-file_br = st.sidebar.file_uploader("Inflación Brasil (CSV)", type="csv")
-file_ar = st.sidebar.file_uploader("Inflación Argentina (CSV)", type="csv")
-file_blue = st.sidebar.file_uploader("USD/ARS Blue (CSV)", type="csv")
-file_brl = st.sidebar.file_uploader("USD/BRL (CSV)", type="csv")
-file_turismo = st.sidebar.file_uploader("Turismo receptivo/emisivo (XLSX)", type="xlsx")
+# --- URLs desde GitHub ---
+BASE_URL = "https://github.com/NMTES/econ/tree/main"
 
-if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
+url_br = BASE_URL + "brasil.csv"
+url_ar = BASE_URL + "serie_ipc_divisiones.csv"
+url_blue = BASE_URL + "usd_ars_blue.csv"
+url_brl = BASE_URL + "usd-brl.csv"
+url_turismo = BASE_URL + "serie_turismo_receptivo_emisivo.xlsx"
+
+try:
     # Inflación Brasil
-    df_br = pd.read_csv(file_br, skiprows=3)
+    df_br = pd.read_csv(url_br, skiprows=3)
     df_brasil = df_br[df_br.iloc[:, 0] == "Brasil"]
     fechas_str = df_brasil.columns[1:]
     valores = df_brasil.values[0][1:]
@@ -40,7 +41,7 @@ if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
     ipca_br = ipca_br[ipca_br['Fecha'] >= '2019-01-01'][['Fecha', 'Infl_BR']]
 
     # Inflación Argentina
-    df_ar = pd.read_csv(file_ar, sep=';', encoding='latin1')
+    df_ar = pd.read_csv(url_ar, sep=';', encoding='latin1')
     ipc_ar = df_ar[(df_ar['Descripcion'] == 'NIVEL GENERAL') & (df_ar['Region'] == 'Nacional')].copy()
     ipc_ar['Fecha'] = pd.to_datetime(ipc_ar['Periodo'], format='%Y%m')
     ipc_ar['Infl_AR'] = ipc_ar['v_m_IPC'].str.replace(',', '.').astype(float)
@@ -50,7 +51,7 @@ if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
     df_comb = pd.merge(ipca_br, ipc_ar, on='Fecha', how='inner')
 
     # Blue
-    df_ars = pd.read_csv(file_blue)
+    df_ars = pd.read_csv(url_blue)
     df_ars['Fecha'] = pd.to_datetime(df_ars['category'])
     df_ars['valor'] = df_ars['valor'].astype(float)
     df_ars['Mes'] = df_ars['Fecha'].dt.to_period('M')
@@ -59,7 +60,7 @@ if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
     blue_mensual = blue_mensual[['Fecha', 'valor']].rename(columns={'valor': 'ARS_USD_Blue'})
 
     # BRL
-    df_brl = pd.read_csv(file_brl)
+    df_brl = pd.read_csv(url_brl)
     df_brl['Fecha'] = pd.to_datetime(df_brl['Fecha'], format='%d.%m.%Y')
     df_brl['USD_BRL'] = df_brl['Último'].str.replace('.', '', regex=False).str.replace(',', '.', regex=False).astype(float)
     df_brl = df_brl[['Fecha', 'USD_BRL']].sort_values('Fecha')
@@ -88,7 +89,7 @@ if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
     st.pyplot(fig1)
 
     # --- TURISMO ---
-    df = pd.read_excel(file_turismo, header=2, engine="openpyxl")
+    df = pd.read_excel(url_turismo, header=2, engine="openpyxl")
     df.columns = ["Año", "Fecha", "Receptivo", "Emisivo", "Saldo"]
     df = df[df["Fecha"].notna()].copy()
     df = df[df["Fecha"] >= "2019-01-01"]
@@ -143,5 +144,7 @@ if all([file_br, file_ar, file_blue, file_brl, file_turismo]):
     ax.grid(True)
     st.pyplot(fig3)
 
-else:
-    st.info("📌 Por favor, cargá todos los archivos desde la barra lateral para continuar.")
+except Exception as e:
+    st.error(f"Ocurrió un error al cargar los datos: {e}")
+    st.info("📌 Verificá que los archivos estén disponibles en la carpeta `streamlit_data` del repositorio.")
+
