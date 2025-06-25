@@ -91,7 +91,6 @@ try:
     ax1.set_ylabel("Índice (Base Ene-2019 = 100)")
     ax1.grid(True)
     fig1.tight_layout()
-    fig1.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC, IBGE, entre otros.", fontsize=9, color='gray')
     st.pyplot(fig1)
 
     st.markdown("""
