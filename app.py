@@ -184,17 +184,19 @@ try:
     ax.set_title("Regresión lineal")
     ax.grid(True)
     st.pyplot(fig3)
+    
     st.markdown("""El siguiente gráfico muestra esa relación de forma visual, usando puntos azules para cada mes. Cada punto indica:
     - Cuál fue el TCR en ese mes (eje horizontal).
     - Cuál fue el saldo turístico correspondiente (eje vertical).
 
     ---
-    Además, agregamos una **línea negra** llamada **recta de regresión**, que resume la tendencia general.
+    
+    Además, agregamos una recta de regresión, que resume la tendencia general.
 
     - Cuando la línea sube, quiere decir que hay una **relación positiva**: a mayor TCR, mejor saldo turístico.
     - No todos los puntos caen sobre la línea, pero siguen un patrón general ascendente.
     
-    Esto confirma que **cuando Argentina se vuelve más barata en comparación con Brasil, mejora el saldo turístico argentino** (vienen más turistas brasileños o se van menos argentinos).
+    Esto confirma que **cuando Argentina se vuelve más barata en comparación con Brasil, mejora el saldo turístico argentino** (vienen más turistas o se van menos argentinos).
     
     ---
     
