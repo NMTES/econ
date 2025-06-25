@@ -239,8 +239,8 @@ try:
     st.pyplot(fig2)
     
     # --- Indicadores ---
-    st.write(f"📈 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
-    st.write(f"📈 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
+    st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
+    st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
 
