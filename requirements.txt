@@ -1,7 +1,8 @@
 pandas
-matplotlib
 numpy
-openpyxl
-xlrd
+matplotlib
 statsmodels
 scikit-learn
+openpyxl
+xlrd
+streamlit
