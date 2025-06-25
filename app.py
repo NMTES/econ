@@ -195,6 +195,9 @@ try:
 
 
     st.header("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
+    st.markdown(""" En este apartado nos proponemos analizar la evolución de las importaciones argentinas, diferenciando entre bienes de consumo y piezas (insumos intermedios), y explorar su posible relación con la dinámica del nivel de actividad económica medida por el Estimador Mensual de Actividad Económica (EMAE).
+    El objetivo es comprender si las variaciones en el EMAE tienen un efecto sistemático sobre el volumen importado de estos bienes, y si dicha relación se mantiene tanto en datos mensuales como en promedios anuales.
+    """)
     df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
 
     categorias = [
