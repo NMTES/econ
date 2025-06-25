@@ -16,7 +16,7 @@ Los datos provienen de fuentes oficiales como INDEC, IBGE, entre otros.
 """)
 
 # --- URLs desde GitHub ---
-BASE_URL = "https://github.com/NMTES/econ/tree/main/streamlit_data"
+BASE_URL = "https://raw.githubusercontent.com/NMTES/econ/main/streamlit_data/"
 
 url_br = BASE_URL + "brasil.csv"
 url_ar = BASE_URL + "serie_ipc_divisiones.csv"
