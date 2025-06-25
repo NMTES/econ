@@ -9,7 +9,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 st.set_page_config(page_title="TCR y Turismo", layout="wide")
 
 st.title("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
-st.subtitle("Realizado por Nicolás Marcelo Toniolo")
+st.markdown("*Realizado por Nicolás Marcelo Toniolo*")
 
 st.markdown("""
 En este apartado nos proponemos analizar la evolución del tipo de cambio real bilateral entre Argentina y Brasil y explorar su posible relación con el saldo turístico de Argentina. El objetivo es comprender si las variaciones en la competitividad cambiaria influyen en los flujos turísticos.
