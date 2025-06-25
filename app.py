@@ -347,9 +347,18 @@ try:
     st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
     st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
-    st.markdown("""¿Qué nos dice esto?
-    Hay una relación positiva débil pero consistente: cuando la economía mejora (aunque sea poco), las empresas probablemente aumentan sus compras de piezas importadas (para maquinaria, insumos, repuestos, etc.).
-    El hecho de que muchos puntos estén dispersos también sugiere que hay otros factores que afectan las importaciones además del EMAE (por ejemplo, restricciones a las importaciones, tipo de cambio, expectativas, etc.).
+    st.markdown("""
+    ### 📊 ¿Qué nos dicen estas correlaciones?
+    
+    Los resultados muestran una **correlación mensual de 0.284 entre las importaciones de piezas y el EMAE**, y una **correlación de 0.250 entre las importaciones de consumo y el EMAE**. 
+    
+    Esto significa que existe una **relación positiva, aunque débil, entre el nivel de actividad económica y las importaciones**. En otras palabras, cuando la economía mejora —aunque sea de forma moderada—, las empresas suelen aumentar sus compras de productos importados, especialmente de piezas que se utilizan como insumos o maquinaria para la producción. Lo mismo ocurre, aunque en menor medida, con los bienes de consumo.
+    
+    Sin embargo, la dispersión de los datos indica que **el EMAE no es el único factor que explica las importaciones**. Muchos puntos se alejan de la tendencia general, lo cual sugiere que también influyen otros elementos como las restricciones comerciales, la evolución del tipo de cambio, la política económica, la disponibilidad de divisas o incluso las expectativas del sector privado.
+    
+    Por lo tanto, si bien puede decirse que las importaciones tienden a acompañar el ciclo económico —crecen en los períodos de expansión y caen en las recesiones—, **la relación está lejos de ser perfecta**, y no sería correcto pensar que se puede anticipar el comportamiento de las importaciones solo observando el EMAE.
+    
+    Estas correlaciones nos ayudan a entender que hay una conexión entre ambos fenómenos, pero también nos recuerdan que la economía real es más compleja y está influida por múltiples variables al mismo tiempo.
     """)
 
     # --- Gráfico anual ---
