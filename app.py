@@ -418,6 +418,28 @@ try:
     r2_lasso_consumo = r2_score(df_anual["Var_Consumo_Desest"], pred_lasso_consumo)
     rmse_lasso_consumo = mean_squared_error(df_anual["Var_Consumo_Desest"], pred_lasso_consumo) ** 0.5
 
+    # Entrenamiento Ridge - Piezas vs EMAE
+    ridge_piezas = Ridge(alpha=1.0)
+    ridge_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
+    pred_ridge_piezas = ridge_piezas.predict(df_anual[["Var_EMAE"]])
+    r2_ridge_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_ridge_piezas)
+    rmse_ridge_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_ridge_piezas) ** 0.5
+    
+    # Gráfico en Streamlit
+    fig, ax10 = plt.subplots()
+    ax10.scatter(df_anual["Var_EMAE"], df_anual["Var_Piezas_Desest"], color='cornflowerblue', label="Datos anuales")
+    ax10.plot(df_anual["Var_EMAE"], pred_ridge_piezas, color='black', label="Regresión Ridge")
+    ax10.set_title("📉 Ridge anual: Piezas Δ% vs EMAE Δ%")
+    ax10.set_xlabel("EMAE Δ% promedio anual")
+    ax10.set_ylabel("Piezas Δ% promedio anual")
+    ax10.grid(True)
+    ax10.legend()
+    st10.pyplot(fig)
+    
+    # Mostrar métricas
+    st.markdown(f"**R² Ridge (Piezas vs EMAE):** {r2_ridge_piezas:.3f}")
+    st.markdown(f"**RMSE Ridge (Piezas vs EMAE):** {rmse_ridge_piezas:.3f}")
+
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
