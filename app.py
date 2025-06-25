@@ -306,6 +306,8 @@ try:
     st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
     st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
+
+    
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
 
     # Regresión para Piezas
@@ -335,6 +337,22 @@ try:
     ax3.set_ylabel("Piezas Δ%")
     ax3.grid(True)
     st.pyplot(fig3)
+    
+    fig4, ax4 = plt.subplots(figsize=(5, 5))
+    ax4.scatter(X_consumo, y_consumo, alpha=0.7, label="Datos")
+    x_vals = np.linspace(X_consumo.min(), X_consumo.max(), 100)
+    y_pred = coef_consumo * x_vals + intercepto_consumo
+    ax4.plot(x_vals, y_pred, color="black", label="Recta de regresión")
+    ax4.set_title("Regresión: Bienes de consumo Δ% vs EMAE Δ%")
+    ax4.set_xlabel("EMAE Δ%")
+    ax4.set_ylabel("Bienes de consumo Δ%")
+    ax4.grid(True)
+    st.pyplot(fig4)
+
+    st.markdown("""¿Qué nos dice esto?
+    Hay una relación positiva débil pero consistente: cuando la economía mejora (aunque sea poco), las empresas probablemente aumentan sus compras de piezas importadas (para maquinaria, insumos, repuestos, etc.).
+    El hecho de que muchos puntos estén dispersos también sugiere que hay otros factores que afectan las importaciones además del EMAE (por ejemplo, restricciones a las importaciones, tipo de cambio, expectativas, etc.).
+    """)
 
     # --- Gráfico anual ---
     df_merged["Año"] = df_merged["Fecha"].dt.year
@@ -353,6 +371,10 @@ try:
     # --- Correlación anual ---
     st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
     st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
+    st.markdown("""¿Qué nos dice esto?
+    Hay una relación positiva débil pero consistente: cuando la economía mejora (aunque sea poco), las empresas probablemente aumentan sus compras de piezas importadas (para maquinaria, insumos, repuestos, etc.).
+    El hecho de que muchos puntos estén dispersos también sugiere que hay otros factores que afectan las importaciones además del EMAE (por ejemplo, restricciones a las importaciones, tipo de cambio, expectativas, etc.).
+    """)
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
