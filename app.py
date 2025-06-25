@@ -245,16 +245,29 @@ try:
     ax2.legend()
     st.pyplot(fig2)
 
-    # --- Regresiones ---
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
-    X = sm.add_constant(df_cleaned["Var_EMAE"])
-    model_piezas = sm.OLS(df_cleaned["Var_Piezas_Desest"], X).fit()
-    model_consumo = sm.OLS(df_cleaned["Var_Consumo_Desest"], X).fit()
 
+    # Regresión para Piezas
+    X_piezas = df_cleaned[["Var_EMAE"]].values
+    y_piezas = df_cleaned["Var_Piezas_Desest"].values
+    modelo_piezas = LinearRegression().fit(X_piezas, y_piezas)
+
+    coef_piezas = modelo_piezas.coef_[0]
+    intercepto_piezas = modelo_piezas.intercept_
+
+    # Regresión para Consumo
+    X_consumo = df_cleaned[["Var_EMAE"]].values
+    y_consumo = df_cleaned["Var_Consumo_Desest"].values
+    modelo_consumo = LinearRegression().fit(X_consumo, y_consumo)
+
+    coef_consumo = modelo_consumo.coef_[0]
+    intercepto_consumo = modelo_consumo.intercept_
+
+    # --- Gráfico de regresión (solo Piezas vs EMAE) ---
     fig3, ax3 = plt.subplots(figsize=(5, 5))
-    ax3.scatter(df_cleaned["Var_EMAE"], df_cleaned["Var_Piezas_Desest"], alpha=0.7, label="Datos")
-    x_vals = np.linspace(df_cleaned["Var_EMAE"].min(), df_cleaned["Var_EMAE"].max(), 100)
-    y_pred = model_piezas.params['const'] + model_piezas.params['Var_EMAE'] * x_vals
+    ax3.scatter(X_piezas, y_piezas, alpha=0.7, label="Datos")
+    x_vals = np.linspace(X_piezas.min(), X_piezas.max(), 100)
+    y_pred = coef_piezas * x_vals + intercepto_piezas
     ax3.plot(x_vals, y_pred, color="black", label="Recta de regresión")
     ax3.set_title("Regresión: Piezas Δ% vs EMAE Δ%")
     ax3.set_xlabel("EMAE Δ%")
