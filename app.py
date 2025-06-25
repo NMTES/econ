@@ -11,8 +11,8 @@ st.set_page_config(page_title="TCR y Turismo", layout="wide")
 st.title("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
 
 st.markdown("""
-Esta app visualiza la evolución del **tipo de cambio real bilateral Argentina-Brasil** y su posible relación con el **saldo turístico**.
-Los datos provienen de fuentes oficiales como INDEC, IBGE, entre otros.
+En este apartado nos proponemos analizar la evolución del tipo de cambio real bilateral entre Argentina y Brasil y explorar su posible relación con el saldo turístico de Argentina. El objetivo es comprender si las variaciones en la competitividad cambiaria influyen en los flujos turísticos.
+Para ello, se utilizarán datos provenientes de fuentes oficiales como el INDEC (Instituto Nacional de Estadística y Censos de Argentina), el IBGE (Instituto Brasileño de Geografía y Estadística), entre otros organismos nacionales e internacionales.
 """)
 
 # --- URLs desde GitHub ---
