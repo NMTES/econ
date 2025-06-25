@@ -386,34 +386,46 @@ try:
     Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa, **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual. Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
 
-    # --- Repetimos el agrupamiento por año si no está antes ---
+    # --- Asegurarse de tener el DataFrame anual ---
     df_merged["Año"] = df_merged["Fecha"].dt.year
     df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
     
-    # --- Regresión EMAE vs Piezas ---
-    X_piezas = sm.add_constant(df_anual["Var_EMAE"])
-    y_piezas = df_anual["Var_Piezas_Desest"]
-    modelo_piezas = sm.OLS(y_piezas, X_piezas).fit()
+    # --- Regresión Piezas vs EMAE ---
+    X_piezas = df_anual[["Var_EMAE"]].values
+    y_piezas = df_anual["Var_Piezas_Desest"].values
+    modelo_piezas = LinearRegression().fit(X_piezas, y_piezas)
+    pred_piezas = modelo_piezas.predict(X_piezas)
     
-    # --- Regresión EMAE vs Consumo ---
-    X_consumo = sm.add_constant(df_anual["Var_EMAE"])
-    y_consumo = df_anual["Var_Consumo_Desest"]
-    modelo_consumo = sm.OLS(y_consumo, X_consumo).fit()
+    r2_piezas = r2_score(y_piezas, pred_piezas)
+    rmse_piezas = mean_squared_error(y_piezas, pred_piezas, squared=False)
     
-    # --- Gráfico regresión Piezas ---
-    fig6, ax6 = plt.subplots(figsize=(6, 5))
-    sns.regplot(x="Var_EMAE", y="Var_Piezas_Desest", data=df_anual, ax=ax6, color="dodgerblue", line_kws={"color": "black"})
+    # --- Regresión Consumo vs EMAE ---
+    X_consumo = df_anual[["Var_EMAE"]].values
+    y_consumo = df_anual["Var_Consumo_Desest"].values
+    modelo_consumo = LinearRegression().fit(X_consumo, y_consumo)
+    pred_consumo = modelo_consumo.predict(X_consumo)
+    
+    r2_consumo = r2_score(y_consumo, pred_consumo)
+    rmse_consumo = mean_squared_error(y_consumo, pred_consumo, squared=False)
+
+    # --- Piezas ---
+    fig6, ax6 = plt.subplots()
+    ax6.scatter(X_piezas, y_piezas, color="dodgerblue", alpha=0.7, label="Datos")
+    ax6.plot(X_piezas, pred_piezas, color="black", label="Regresión")
     ax6.set_title("📈 Regresión anual: Piezas Δ% vs EMAE Δ%")
     ax6.set_xlabel("EMAE Δ% promedio anual")
     ax6.set_ylabel("Piezas Δ% promedio anual")
+    ax6.legend()
     st.pyplot(fig6)
     
-    # --- Gráfico regresión Consumo ---
-    fig7, ax7 = plt.subplots(figsize=(6, 5))
-    sns.regplot(x="Var_EMAE", y="Var_Consumo_Desest", data=df_anual, ax=ax7, color="darkorange", line_kws={"color": "black"})
+    # --- Consumo ---
+    fig7, ax7 = plt.subplots()
+    ax7.scatter(X_consumo, y_consumo, color="darkorange", alpha=0.7, label="Datos")
+    ax7.plot(X_consumo, pred_consumo, color="black", label="Regresión")
     ax7.set_title("📈 Regresión anual: Consumo Δ% vs EMAE Δ%")
     ax7.set_xlabel("EMAE Δ% promedio anual")
     ax7.set_ylabel("Consumo Δ% promedio anual")
+    ax7.legend()
     st.pyplot(fig7)
 
 except Exception as e:
