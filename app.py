@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
-
+st.title("Analisis de TCR, TURISMO e IMPORTACIONES.")
+st.markdown("*Realizado por Nicolás Marcelo Toniolo*")
 st.set_page_config(page_title="TCR y Turismo", layout="wide")
 
 st.header("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
-st.markdown("*Realizado por Nicolás Marcelo Toniolo*")
+
 
 st.markdown("""
 En este apartado nos proponemos analizar la evolución del tipo de cambio real bilateral entre Argentina y Brasil y explorar su posible relación con el saldo turístico de Argentina. El objetivo es comprender si las variaciones en la competitividad cambiaria influyen en los flujos turísticos.
