@@ -6,6 +6,15 @@ import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge, Lasso
 from sklearn.metrics import mean_squared_error, r2_score
+def st_justified(text):
+    st.markdown(
+        f"""
+        <div style='text-align: justify; margin: 10px 0px; font-size: 16px; line-height: 1.6'>
+            {text}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.title("Analisis de TCR, TURISMO e IMPORTACIONES.")
 st.markdown("*Realizado por Nicolás Marcelo Toniolo.*")
@@ -93,7 +102,7 @@ try:
     fig1.tight_layout()
     st.pyplot(fig1)
 
-    st.markdown("""
+    st.st_justified("""
     Este gráfico muestra la evolución del Tipo de Cambio Real (TCR) bilateral entre Argentina y Brasil, con base enero 2019 = 100. Cuanto más alto es este índice, más competitiva se vuelve Argentina respecto a Brasil (es decir, los precios argentinos son más bajos en relación a los brasileños, facilitando las exportaciones y atrayendo turismo). Cuando el TCR cae, como a fines de 2023 y en 2024, Argentina se vuelve más cara en términos relativos, lo cual podría desalentar el turismo receptivo desde Brasil.""")
 
     # --- TURISMO ---
@@ -125,7 +134,6 @@ try:
     ax.set_title("TCR Bilateral Argentina-Brasil vs Saldo Turístico")
     ax.set_ylabel("TCR (Índice Ene-2019 = 100)", color="blue")
     ax2.set_ylabel("Saldo Turístico (miles de personas)", color="red")
-    fig2.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC, IBGE, entre otros.", fontsize=9, color='gray')
     ax.grid(True)
     fig2.tight_layout()
     st.pyplot(fig2)
@@ -256,7 +264,6 @@ try:
     ax1.plot(df["Fecha"], df["Piezas_Desest"], label="Piezas Desestacionalizadas")
     ax1.plot(df["Fecha"], df["Consumo_Desest"], label="Consumo Desestacionalizado")
     ax1.set_title("Índices Desestacionalizados (2004-2025)")
-    fig1.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC.", fontsize=9, color='gray')
     ax1.legend()
     ax1.grid(True)
     st.pyplot(fig1)
@@ -295,7 +302,6 @@ try:
     ax2.plot(df_merged["Fecha"], df_merged["Var_Piezas_Desest"], label="Piezas Δ%")
     ax2.plot(df_merged["Fecha"], df_merged["Var_Consumo_Desest"], label="Consumo Δ%")
     ax2.set_title("Variaciones mensuales desestacionalizadas")
-    fig2.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC.", fontsize=9, color='gray')
     ax2.axhline(0, color="gray")
     ax2.grid(True)
     ax2.legend()
@@ -374,7 +380,6 @@ try:
     ax5.grid(True)
     ax5.legend()
     ax5.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
-    fig5.figtext(0, 0, "Fuente: Elaboración propia en base a datos de INDEC.", fontsize=9, color='gray')
     st.pyplot(fig5)
     
     # --- Correlación anual ---
