@@ -301,13 +301,7 @@ try:
     - Las importaciones de **piezas** reaccionan con más fuerza y podrían usarse como **indicador temprano de actividad industrial**.
     - Las importaciones de consumo también siguen la actividad, pero de forma un poco más dispersa.
     """)
-    
-    # --- Indicadores ---
-    st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
-    st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
-
-    
     df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
 
     # Regresión para Piezas
@@ -326,7 +320,7 @@ try:
     coef_consumo = modelo_consumo.coef_[0]
     intercepto_consumo = modelo_consumo.intercept_
 
-    # --- Gráfico de regresión (solo Piezas vs EMAE) ---
+    # --- Gráfico de regresión ---
     fig3, ax3 = plt.subplots(figsize=(5, 5))
     ax3.scatter(X_piezas, y_piezas, alpha=0.7, label="Datos")
     x_vals = np.linspace(X_piezas.min(), X_piezas.max(), 100)
@@ -348,6 +342,10 @@ try:
     ax4.set_ylabel("Bienes de consumo Δ%")
     ax4.grid(True)
     st.pyplot(fig4)
+
+    # --- Indicadores ---
+    st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
+    st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
     st.markdown("""¿Qué nos dice esto?
     Hay una relación positiva débil pero consistente: cuando la economía mejora (aunque sea poco), las empresas probablemente aumentan sus compras de piezas importadas (para maquinaria, insumos, repuestos, etc.).
