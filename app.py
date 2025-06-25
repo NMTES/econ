@@ -127,7 +127,6 @@ try:
     st.pyplot(fig2)
 
     st.markdown("""
-    ### 🌍 TCR vs Saldo Turístico
     
     Este gráfico compara dos cosas distintas pero relacionadas:
     
@@ -148,6 +147,7 @@ try:
 
     
     # --- Correlación de Pearson ---
+    st.markdown("### 📉 Coeficiente de correlación y Regresion.")
     corr_pearson = df_completo[["TCR_indice", "Saldo"]].corr().iloc[0, 1]
     st.write(f"**Coeficiente de correlación:** {corr_pearson:.3f}")
     # Regresión entre TCR y saldo turístico
@@ -158,6 +158,10 @@ try:
     y_pred = model.predict(X_tcr)
     r2 = r2_score(y, y_pred)
     rmse = np.sqrt(mean_squared_error(y, y_pred))
+    st.write(f"**Coeficiente:** {model.coef_[0]:.4f}")
+    st.write(f"**Intercepto:** {model.intercept_:.4f}")
+    st.write(f"**R²:** {r2:.3f}")
+    st.write(f"**RMSE:** {rmse:.2f}")
 
     st.markdown("""
     Hicimos algunos cálculos para ver si esta relación es real:
@@ -166,15 +170,10 @@ try:
     - **Regresión:**  
       Usamos una fórmula matemática para ver cómo el TCR afecta al saldo turístico:
       > Saldo = 5122 × TCR − 792880  
-      Esto significa que por cada punto que sube el TCR, el saldo mejora en unas 5.000 personas (en miles).
+      Esto significa que por cada punto que sube el TCR, el saldo mejora.
     - **R² = 0.308:** Esto quiere decir que un 30% de los cambios en el saldo turístico pueden explicarse por el TCR.
     - **Error (RMSE):** 216.850 → El modelo no es perfecto, pero ayuda a ver una tendencia general.""")
     
-    st.markdown("### 📉 Regresión: Saldo turístico vs TCR")
-    st.write(f"**Coeficiente:** {model.coef_[0]:.4f}")
-    st.write(f"**Intercepto:** {model.intercept_:.4f}")
-    st.write(f"**R²:** {r2:.3f}")
-    st.write(f"**RMSE:** {rmse:.2f}")
     
     fig3, ax = plt.subplots(figsize=(6, 6))
     ax.scatter(X_tcr, y, label="Datos", alpha=0.6)
