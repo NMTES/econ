@@ -1,0 +1,26 @@
+﻿"Tabela 1737 - IPCA - Série histórica com número-índice, variação mensal e variações acumuladas em 3 meses, em 6 meses, no ano e em 12 meses (a partir de dezembro/1979)"
+"Variável - IPCA - Variação mensal (%)"
+"","Mês"
+"","janeiro 2019","fevereiro 2019","março 2019","abril 2019","maio 2019","junho 2019","julho 2019","agosto 2019","setembro 2019","outubro 2019","novembro 2019","dezembro 2019","janeiro 2020","fevereiro 2020","março 2020","abril 2020","maio 2020","junho 2020","julho 2020","agosto 2020","setembro 2020","outubro 2020","novembro 2020","dezembro 2020","janeiro 2021","fevereiro 2021","março 2021","abril 2021","maio 2021","junho 2021","julho 2021","agosto 2021","setembro 2021","outubro 2021","novembro 2021","dezembro 2021","janeiro 2022","fevereiro 2022","março 2022","abril 2022","maio 2022","junho 2022","julho 2022","agosto 2022","setembro 2022","outubro 2022","novembro 2022","dezembro 2022","janeiro 2023","fevereiro 2023","março 2023","abril 2023","maio 2023","junho 2023","julho 2023","agosto 2023","setembro 2023","outubro 2023","novembro 2023","dezembro 2023","janeiro 2024","fevereiro 2024","março 2024","abril 2024","maio 2024","junho 2024","julho 2024","agosto 2024","setembro 2024","outubro 2024","novembro 2024","dezembro 2024","janeiro 2025","fevereiro 2025","março 2025","abril 2025"
+"Brasil","0.32","0.43","0.75","0.57","0.13","0.01","0.19","0.11","-0.04","0.10","0.51","1.15","0.21","0.25","0.07","-0.31","-0.38","0.26","0.36","0.24","0.64","0.86","0.89","1.35","0.25","0.86","0.93","0.31","0.83","0.53","0.96","0.87","1.16","1.25","0.95","0.73","0.54","1.01","1.62","1.06","0.47","0.67","-0.68","-0.36","-0.29","0.59","0.41","0.62","0.53","0.84","0.71","0.61","0.23","-0.08","0.12","0.23","0.26","0.24","0.28","0.56","0.42","0.83","0.16","0.38","0.46","0.21","0.38","-0.02","0.44","0.56","0.39","0.52","0.16","1.31","0.56","0.43"
+"Fonte: IBGE - Índice Nacional de Preços ao Consumidor Amplo"
+
+"Notas"
+"1 - Período de coleta ajustado ao mês civil (do primeiro ao trigésimo dia de cada mês), para os meses anteriores a março de 1986."
+""
+"Legenda"
+"Símbolo","Significado"
+"-","Zero absoluto, não resultante de um cálculo ou arredondamento.
+Ex: Em determinado município não existem pessoas de 14 anos de idade sem instrução."
+"0","Zero resultante de um cálculo ou arredondamento.
+Ex: A inflação do feijão em determinada Região Metropolitana foi 0.
+Determinado município produziu 400 kg de sementes de girassol e os dados da tabela são expressos em toneladas."
+"X","Valor inibido para não identificar o informante.
+Ex: Determinado município só possui uma empresa produtora de cimento, logo o valor de sua produção deve ser inibido."
+"..","Valor não se aplica.
+Ex: Não se pode obter o total da produção agrícola em determinado município quando os produtos agrícolas são contabilizados com unidades de medida distintas."
+"...","Valor não disponível.
+Ex: A produção de feijão em determinado município não foi pesquisada ou determinado município não existia no ano da pesquisa."
+"A a Z
+(exceto X)","Significa uma faixa de valores. Varia em função da tabela (se for o caso).
+Ex: O nível de precisão da produção estimada de combustíveis está na faixa A (95 a 100%)"
