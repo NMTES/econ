@@ -388,57 +388,45 @@ try:
     Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa, **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual. Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
 
+    # Regresión anual: Piezas vs EMAE
+    X_piezas_anual = df_anual[["Var_EMAE"]].values
+    y_piezas_anual = df_anual["Var_Piezas_Desest"].values
+    modelo_piezas_anual = LinearRegression().fit(X_piezas_anual, y_piezas_anual)
+    
+    coef_piezas_anual = modelo_piezas_anual.coef_[0]
+    intercepto_piezas_anual = modelo_piezas_anual.intercept_
+    pred_piezas_anual = modelo_piezas_anual.predict(X_piezas_anual)
+    r2_piezas_anual = r2_score(y_piezas_anual, pred_piezas_anual)
+    rmse_piezas_anual = mean_squared_error(y_piezas_anual, pred_piezas_anual) ** 0.5
+    
+    # Regresión anual: Consumo vs EMAE
+    X_consumo_anual = df_anual[["Var_EMAE"]].values
+    y_consumo_anual = df_anual["Var_Consumo_Desest"].values
+    modelo_consumo_anual = LinearRegression().fit(X_consumo_anual, y_consumo_anual)
+    
+    coef_consumo_anual = modelo_consumo_anual.coef_[0]
+    intercepto_consumo_anual = modelo_consumo_anual.intercept_
+    pred_consumo_anual = modelo_consumo_anual.predict(X_consumo_anual)
+    r2_consumo_anual = r2_score(y_consumo_anual, pred_consumo_anual)
+    rmse_consumo_anual = mean_squared_error(y_consumo_anual, pred_consumo_anual) ** 0.5
 
+    # Gráfico de dispersión con línea de regresión: Piezas
+    fig6, ax6 = plt.subplots(figsize=(6, 5))
+    ax6.scatter(X_piezas_anual, y_piezas_anual, color="dodgerblue", alpha=0.7, label="Datos anuales")
+    ax6.plot(X_piezas_anual, pred_piezas_anual, color="black", label="Regresión")
+    ax6.set_title("Regresión anual: Piezas y accesorios Δ% vs EMAE Δ%")
+    ax6.set_xlabel("EMAE Δ%")
+    ax6.set_ylabel("Piezas Δ%")
+    st.pyplot(fig6)
     
-    # RIDGE - Piezas vs EMAE
-    ridge_piezas = Ridge(alpha=1.0)  # podés ajustar alpha
-    ridge_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
-    pred_ridge_piezas = ridge_piezas.predict(df_anual[["Var_EMAE"]])
-    r2_ridge_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_ridge_piezas)
-    rmse_ridge_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_ridge_piezas) ** 0.5
-    
-    # LASSO - Piezas vs EMAE (opcional)
-    lasso_piezas = Lasso(alpha=0.1)
-    lasso_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
-    pred_lasso_piezas = lasso_piezas.predict(df_anual[["Var_EMAE"]])
-    r2_lasso_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_lasso_piezas)
-    rmse_lasso_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_lasso_piezas) ** 0.5
-    
-    # RIDGE - Consumo vs EMAE
-    ridge_consumo = Ridge(alpha=1.0)
-    ridge_consumo.fit(df_anual[["Var_EMAE"]], df_anual["Var_Consumo_Desest"])
-    pred_ridge_consumo = ridge_consumo.predict(df_anual[["Var_EMAE"]])
-    r2_ridge_consumo = r2_score(df_anual["Var_Consumo_Desest"], pred_ridge_consumo)
-    rmse_ridge_consumo = mean_squared_error(df_anual["Var_Consumo_Desest"], pred_ridge_consumo) ** 0.5
-    
-    # LASSO - Consumo vs EMAE (opcional)
-    lasso_consumo = Lasso(alpha=0.1)
-    lasso_consumo.fit(df_anual[["Var_EMAE"]], df_anual["Var_Consumo_Desest"])
-    pred_lasso_consumo = lasso_consumo.predict(df_anual[["Var_EMAE"]])
-    r2_lasso_consumo = r2_score(df_anual["Var_Consumo_Desest"], pred_lasso_consumo)
-    rmse_lasso_consumo = mean_squared_error(df_anual["Var_Consumo_Desest"], pred_lasso_consumo) ** 0.5
-
-    # Entrenamiento Ridge - Piezas vs EMAE
-    ridge_piezas = Ridge(alpha=1.0)
-    ridge_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
-    pred_ridge_piezas = ridge_piezas.predict(df_anual[["Var_EMAE"]])
-    r2_ridge_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_ridge_piezas)
-    rmse_ridge_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_ridge_piezas) ** 0.5
-    
-    # Gráfico en Streamlit
-    fig, ax10 = plt.subplots()
-    ax10.scatter(df_anual["Var_EMAE"], df_anual["Var_Piezas_Desest"], color='cornflowerblue', label="Datos anuales")
-    ax10.plot(df_anual["Var_EMAE"], pred_ridge_piezas, color='black', label="Regresión Ridge")
-    ax10.set_title("📉 Ridge anual: Piezas Δ% vs EMAE Δ%")
-    ax10.set_xlabel("EMAE Δ% promedio anual")
-    ax10.set_ylabel("Piezas Δ% promedio anual")
-    ax10.grid(True)
-    ax10.legend()
-    st.pyplot(fig)
-    
-    # Mostrar métricas
-    st.markdown(f"**R² Ridge (Piezas vs EMAE):** {r2_ridge_piezas:.3f}")
-    st.markdown(f"**RMSE Ridge (Piezas vs EMAE):** {rmse_ridge_piezas:.3f}")
+    # Gráfico de dispersión con línea de regresión: Consumo
+    fig7, ax7 = plt.subplots(figsize=(6, 5))
+    ax7.scatter(X_consumo_anual, y_consumo_anual, color="darkorange", alpha=0.7, label="Datos anuales")
+    ax7.plot(X_consumo_anual, pred_consumo_anual, color="black", label="Regresión")
+    ax7.set_title("Regresión anual: Bienes de consumo Δ% vs EMAE Δ%")
+    ax7.set_xlabel("EMAE Δ%")
+    ax7.set_ylabel("Bienes Δ%")
+    st.pyplot(fig7)
 
 
 except Exception as e:
