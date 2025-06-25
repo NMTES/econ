@@ -124,6 +124,51 @@ try:
     ax.grid(True)
     fig2.tight_layout()
     st.pyplot(fig2)
+
+    st.markdown("""
+    ### 🌍 ¿Qué muestra este gráfico?
+    
+    Este gráfico compara dos cosas distintas pero relacionadas:
+    
+    1. La **línea azul** muestra el **TCR** que ya explicamos antes (si Argentina está más barata o más cara que Brasil).
+    2. La **línea roja** muestra el **saldo turístico**, que es la diferencia entre:
+       - La cantidad de brasileños que vienen a hacer turismo en Argentina.
+       - Y la cantidad de argentinos que viajan a Brasil.
+    
+    Si la línea roja está por debajo de cero, significa que **más argentinos están viajando a Brasil que brasileños viniendo a Argentina**.
+    
+    ---
+    
+    ### 🔍 ¿Qué podemos ver?
+    
+    - Cuando el **TCR sube** (Argentina se vuelve más barata), el saldo turístico mejora: vienen más brasileños o viajan menos argentinos.
+    - Cuando el **TCR baja** (Argentina se vuelve más cara), el saldo turístico empeora: se van más argentinos a Brasil y vienen menos turistas brasileños.
+    
+    Esto sugiere que **el precio relativo entre los dos países influye en las decisiones de viaje**.
+    
+    ---
+    
+    ### 📊 ¿Qué dicen los números?
+    
+    Hicimos algunos cálculos para ver si esta relación es real:
+    
+    - **Correlación:** 0.555 → Hay una relación moderada: cuando el TCR sube, el saldo turístico mejora.
+    - **Regresión:**  
+      Usamos una fórmula matemática para ver cómo el TCR afecta al saldo turístico:
+      > Saldo = 5122 × TCR − 792880  
+      Esto significa que por cada punto que sube el TCR, el saldo mejora en unas 5.000 personas (en miles).
+    - **R² = 0.308:** Esto quiere decir que un 30% de los cambios en el saldo turístico pueden explicarse por el TCR.
+    - **Error (RMSE):** 216.850 → El modelo no es perfecto, pero ayuda a ver una tendencia general.
+    
+    ---
+    
+    ### ✅ Conclusión simple
+    
+    Cuando Argentina está más barata que Brasil, es más probable que vengan turistas brasileños y que menos argentinos crucen la frontera para vacacionar.  
+    El **tipo de cambio real influye** en el turismo, aunque también hay otros factores como los ingresos, las restricciones para viajar, o incluso el clima.
+    """)
+
+
     
     # --- Correlación de Pearson ---
     corr_pearson = df_completo[["TCR_indice", "Saldo"]].corr().iloc[0, 1]
