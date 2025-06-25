@@ -387,27 +387,31 @@ try:
     Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa, **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual. Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
 
-    # --- Asegurarse de tener el DataFrame anual ---
+    # Agrupar por año (si no está ya hecho)
     df_merged["Año"] = df_merged["Fecha"].dt.year
     df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
     
-    # --- Regresión Piezas vs EMAE ---
-    X_piezas = df_anual[["Var_EMAE"]].values
-    y_piezas = df_anual["Var_Piezas_Desest"].values
-    modelo_piezas = LinearRegression().fit(X_piezas, y_piezas)
-    pred_piezas = modelo_piezas.predict(X_piezas)
+    # --- Regresión Piezas vs EMAE (anual) ---
+    X_piezas_anual = df_anual[["Var_EMAE"]].values
+    y_piezas_anual = df_anual["Var_Piezas_Desest"].values
+    modelo_piezas_anual = LinearRegression().fit(X_piezas_anual, y_piezas_anual)
     
-    r2_piezas = r2_score(y_piezas, pred_piezas)
-    rmse_piezas = mean_squared_error(y_piezas, pred_piezas, squared=False)
+    coef_piezas_anual = modelo_piezas_anual.coef_[0]
+    intercepto_piezas_anual = modelo_piezas_anual.intercept_
+    pred_piezas_anual = modelo_piezas_anual.predict(X_piezas_anual)
+    rmse_piezas_anual = mean_squared_error(y_piezas_anual, pred_piezas_anual) ** 0.5
+    r2_piezas_anual = r2_score(y_piezas_anual, pred_piezas_anual)
     
-    # --- Regresión Consumo vs EMAE ---
-    X_consumo = df_anual[["Var_EMAE"]].values
-    y_consumo = df_anual["Var_Consumo_Desest"].values
-    modelo_consumo = LinearRegression().fit(X_consumo, y_consumo)
-    pred_consumo = modelo_consumo.predict(X_consumo)
+    # --- Regresión Consumo vs EMAE (anual) ---
+    X_consumo_anual = df_anual[["Var_EMAE"]].values
+    y_consumo_anual = df_anual["Var_Consumo_Desest"].values
+    modelo_consumo_anual = LinearRegression().fit(X_consumo_anual, y_consumo_anual)
     
-    r2_consumo = r2_score(y_consumo, pred_consumo)
-    rmse_consumo = mean_squared_error(y_consumo, pred_consumo, squared=False)
+    coef_consumo_anual = modelo_consumo_anual.coef_[0]
+    intercepto_consumo_anual = modelo_consumo_anual.intercept_
+    pred_consumo_anual = modelo_consumo_anual.predict(X_consumo_anual)
+    rmse_consumo_anual = mean_squared_error(y_consumo_anual, pred_consumo_anual) ** 0.5
+    r2_consumo_anual = r2_score(y_consumo_anual, pred_consumo_anual)
 
     # --- Piezas ---
     fig6, ax6 = plt.subplots()
