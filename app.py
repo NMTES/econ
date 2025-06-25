@@ -110,6 +110,7 @@ try:
 
     # GRAFICO TCR vs Turismo
     st.subheader("🌍 TCR vs Saldo Turístico")
+    
     fig2, ax = plt.subplots(figsize=(12, 5))
     ax.plot(df_completo["Fecha"], df_completo["TCR_indice"], label="TCR Bilateral", color="blue")
     ax2 = ax.twinx()
@@ -120,7 +121,12 @@ try:
     ax.grid(True)
     fig2.tight_layout()
     st.pyplot(fig2)
-
+    
+    # --- Correlación de Pearson ---
+    corr_pearson = df_completo[["TCR_indice", "Saldo"]].corr().iloc[0, 1]
+    st.markdown("### 🔗 Correlación de Pearson")
+    st.write(f"**Coeficiente de correlación:** {corr_pearson:.3f}")
+    
     # Regresión entre TCR y saldo turístico
     X_tcr = df_completo[["TCR_indice"]].values
     y = df_completo["Saldo"].values
@@ -129,13 +135,13 @@ try:
     y_pred = model.predict(X_tcr)
     r2 = r2_score(y, y_pred)
     rmse = np.sqrt(mean_squared_error(y, y_pred))
-
+    
     st.markdown("### 📉 Regresión: Saldo turístico vs TCR")
     st.write(f"**Coeficiente:** {model.coef_[0]:.4f}")
     st.write(f"**Intercepto:** {model.intercept_:.4f}")
     st.write(f"**R²:** {r2:.3f}")
     st.write(f"**RMSE:** {rmse:.2f}")
-
+    
     fig3, ax = plt.subplots(figsize=(6, 6))
     ax.scatter(X_tcr, y, label="Datos", alpha=0.6)
     ax.plot(X_tcr, y_pred, color="black", label="Regresión")
@@ -144,6 +150,7 @@ try:
     ax.set_title("Regresión lineal")
     ax.grid(True)
     st.pyplot(fig3)
+
 
     st.title("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
     df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
