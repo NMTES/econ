@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 st.set_page_config(page_title="TCR y Turismo", layout="wide")
 
-st.title("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
+st.header("📊 Tipo de Cambio Real Bilateral y Saldo Turístico")
 st.markdown("*Realizado por Nicolás Marcelo Toniolo*")
 
 st.markdown("""
