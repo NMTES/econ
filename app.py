@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
@@ -23,6 +24,8 @@ url_ar = BASE_URL + "serie_ipc_divisiones.csv"
 url_blue = BASE_URL + "usd_ars_blue.csv"
 url_brl = BASE_URL + "usd-brl.csv"
 url_turismo = BASE_URL + "serie_turismo_receptivo_emisivo.xlsx"
+url_importaciones = BASE_URL + "serie_mensual_indices_impo_ue.xls"
+url_emae = BASE_URL + "sh_emae_mensual_base2004.xls"
 
 try:
     # Inflación Brasil
@@ -144,7 +147,143 @@ try:
     ax.grid(True)
     st.pyplot(fig3)
 
+        # --- Leer archivos ---
+    df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
+
+    categorias = [
+        "Nivel general", "Bienes de capital", "Bienes intermedios",
+        "Combustibles y lubricantes", "Piezas y accesorios para bienes de capital",
+        "Bienes de consumo", "Vehículos automotores de pasajeros"
+    ]
+
+    columnas = ["Año", "Mes"]
+    for categoria in categorias:
+        columnas += [f"{categoria} - Valor", f"{categoria} - Precio", f"{categoria} - Cantidad", f"{categoria} - Extra"]
+    df_raw.columns = columnas[:len(df_raw.columns)]
+
+    meses_validos = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    df_raw["Mes"] = df_raw["Mes"].astype(str).str.strip().str.capitalize()
+    df_raw = df_raw[df_raw["Mes"].isin(meses_validos)].copy()
+
+    año_actual = None
+    años = []
+    for val in df_raw["Año"]:
+        val_str = str(val).strip()
+        posible_año = ''.join(filter(str.isdigit, val_str))
+        if posible_año.isdigit():
+            año_actual = int(posible_año)
+        años.append(año_actual)
+    df_raw["Año"] = años
+
+    df_raw["Mes_num"] = df_raw["Mes"].apply(lambda x: meses_validos.index(x) + 1)
+    df_raw["Fecha"] = pd.to_datetime(dict(year=df_raw["Año"], month=df_raw["Mes_num"], day=1))
+
+    # --- Extraccion y desestacionalización ---
+    df = pd.DataFrame()
+    df["Fecha"] = df_raw["Fecha"]
+    df["Piezas_Cantidad"] = pd.to_numeric(df_raw["Piezas y accesorios para bienes de capital - Cantidad"], errors="coerce")
+    df["Consumo_Cantidad"] = pd.to_numeric(df_raw["Bienes de consumo - Cantidad"], errors="coerce")
+    df["Año"] = df["Fecha"].dt.year
+    df["Mes"] = df["Fecha"].dt.month
+
+    prom_anual = df.groupby("Año")[["Piezas_Cantidad", "Consumo_Cantidad"]].transform("mean")
+    df["Piezas_Proxy"] = df["Piezas_Cantidad"] / prom_anual["Piezas_Cantidad"]
+    df["Consumo_Proxy"] = df["Consumo_Cantidad"] / prom_anual["Consumo_Cantidad"]
+
+    coef = df.groupby("Mes")[["Piezas_Proxy", "Consumo_Proxy"]].mean().reset_index()
+    df = df.merge(coef, on="Mes", suffixes=("", "_coef"))
+    df["Piezas_Desest"] = df["Piezas_Cantidad"] / df["Piezas_Proxy_coef"]
+    df["Consumo_Desest"] = df["Consumo_Cantidad"] / df["Consumo_Proxy_coef"]
+    df["Var_Piezas_Desest"] = df["Piezas_Desest"].pct_change(fill_method=None) * 100
+    df["Var_Consumo_Desest"] = df["Consumo_Desest"].pct_change(fill_method=None) * 100
+
+    # --- Gráfico desestacionalizado ---
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.plot(df["Fecha"], df["Piezas_Desest"], label="Piezas Desestacionalizadas")
+    ax1.plot(df["Fecha"], df["Consumo_Desest"], label="Consumo Desestacionalizado")
+    ax1.set_title("Índices Desestacionalizados (2004-2025)")
+    ax1.grid(True)
+    ax1.legend()
+    st.pyplot(fig1)
+
+    # --- EMAE ---
+    df_emae = pd.read_excel(url_emae, skiprows=3, header=None, engine="xlrd")
+    df_emae.columns = ["Año", "Mes", "Serie_Original", "Var_anual", "EMAE_Desest", "Var_mensual_desest", "Tendencia_Ciclo", "Var_mensual_tendencia"]
+    meses_dict = {m: i+1 for i, m in enumerate(meses_validos)}
+    df_emae["Mes"] = df_emae["Mes"].astype(str).str.strip().str.capitalize()
+    df_emae = df_emae[df_emae["Mes"].isin(meses_dict.keys())].copy()
+
+    año_actual = None
+    años = []
+    for val in df_emae["Año"]:
+        if pd.notna(val) and str(val).strip().isdigit():
+            año_actual = int(val)
+        años.append(año_actual)
+    df_emae["Año"] = años
+    df_emae["Mes_num"] = df_emae["Mes"].map(meses_dict)
+    df_emae["Fecha"] = pd.to_datetime(dict(year=df_emae["Año"], month=df_emae["Mes_num"], day=1), errors='coerce')
+    df_emae = df_emae[df_emae["Fecha"].notna()].sort_values("Fecha").reset_index(drop=True)
+
+    # --- Merge e indicadores ---
+    df_merged = pd.merge(df, df_emae[["Fecha", "Var_mensual_desest"]], on="Fecha", how="inner")
+    df_merged.rename(columns={"Var_mensual_desest": "Var_EMAE"}, inplace=True)
+    corr_piezas = df_merged[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    corr_consumo = df_merged[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    st.write(f"📈 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
+    st.write(f"📈 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
+
+    # --- Gráfico de variaciones ---
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
+    ax2.plot(df_merged["Fecha"], df_merged["Var_EMAE"], label="EMAE Δ%", color="black")
+    ax2.plot(df_merged["Fecha"], df_merged["Var_Piezas_Desest"], label="Piezas Δ%")
+    ax2.plot(df_merged["Fecha"], df_merged["Var_Consumo_Desest"], label="Consumo Δ%")
+    ax2.set_title("Variaciones mensuales desestacionalizadas")
+    ax2.axhline(0, color="gray")
+    ax2.grid(True)
+    ax2.legend()
+    st.pyplot(fig2)
+
+    # --- Regresiones ---
+    df_cleaned = df_merged.dropna(subset=["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]).copy()
+    X = sm.add_constant(df_cleaned["Var_EMAE"])
+    model_piezas = sm.OLS(df_cleaned["Var_Piezas_Desest"], X).fit()
+    model_consumo = sm.OLS(df_cleaned["Var_Consumo_Desest"], X).fit()
+
+    fig3, ax3 = plt.subplots(figsize=(5, 5))
+    ax3.scatter(df_cleaned["Var_EMAE"], df_cleaned["Var_Piezas_Desest"], alpha=0.7, label="Datos")
+    x_vals = np.linspace(df_cleaned["Var_EMAE"].min(), df_cleaned["Var_EMAE"].max(), 100)
+    y_pred = model_piezas.params['const'] + model_piezas.params['Var_EMAE'] * x_vals
+    ax3.plot(x_vals, y_pred, color="black", label="Recta de regresión")
+    ax3.set_title("Regresión: Piezas Δ% vs EMAE Δ%")
+    ax3.set_xlabel("EMAE Δ%")
+    ax3.set_ylabel("Piezas Δ%")
+    ax3.grid(True)
+    ax3.legend()
+    st.pyplot(fig3)
+
+    # --- Correlación anual ---
+    df_merged["Año"] = df_merged["Fecha"].dt.year
+    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
+    corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
+    st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
+    st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
+
+    # --- Gráfico anual ---
+    fig4, ax4 = plt.subplots(figsize=(8, 4))
+    ax4.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
+    ax4.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
+    ax4.plot(df_anual["Año"], df_anual["Var_Consumo_Desest"], label="Consumo Δ% anual")
+    ax4.axhline(0, color="gray")
+    ax4.grid(True)
+    ax4.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
+    ax4.legend()
+    st.pyplot(fig4)
+
+
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
     st.info("📌 Verificá que los archivos estén disponibles en la carpeta `streamlit_data` del repositorio.")
-
