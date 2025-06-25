@@ -145,7 +145,7 @@ try:
     ax.grid(True)
     st.pyplot(fig3)
 
-        # --- Leer archivos ---
+    st.title("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
     df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
 
     categorias = [
