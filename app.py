@@ -126,47 +126,30 @@ try:
     fig2.tight_layout()
     st.pyplot(fig2)
 
-    st.markdown("""
-    
-    Este gráfico compara dos cosas distintas pero relacionadas:
-    
-    1. La **línea azul** muestra el **TCR** que ya explicamos antes (si Argentina está más barata o más cara que Brasil).
-    2. La **línea roja** muestra el **saldo turístico**, que es la diferencia entre:
-       - La cantidad de turistas que ingresan a Argentina.
-       - Y la cantidad de argentinos que viajan al exterior.
-    
-    Si la línea roja está por debajo de cero, significa que **más argentinos están viajando a Brasil que brasileños viniendo a Argentina**.
-    
-    ---
-    
-    - Cuando el **TCR sube** (Argentina se vuelve más barata), el saldo turístico mejora: vienen más brasileños o viajan menos argentinos.
-    - Cuando el **TCR baja** (Argentina se vuelve más cara), el saldo turístico empeora: se van más argentinos a Brasil y vienen menos turistas brasileños.
-    
-    Esto sugiere que **el precio relativo entre los dos países influye en las decisiones de viaje**.
-    
-    ---
-    
-    Hicimos algunos cálculos para ver si esta relación es real:
-    
-    - **Correlación:** 0.555 → Hay una relación moderada: cuando el TCR sube, el saldo turístico mejora.
-    - **Regresión:**  
-      Usamos una fórmula matemática para ver cómo el TCR afecta al saldo turístico:
-      > Saldo = 5122 × TCR − 792880  
-      Esto significa que por cada punto que sube el TCR, el saldo mejora en unas 5.000 personas (en miles).
-    - **R² = 0.308:** Esto quiere decir que un 30% de los cambios en el saldo turístico pueden explicarse por el TCR.
-    - **Error (RMSE):** 216.850 → El modelo no es perfecto, pero ayuda a ver una tendencia general.
-    
-    ---
-    
-    Cuando Argentina está más barata que Brasil, es más probable que vengan turistas y que menos argentinos crucen la frontera para vacacionar.  
-    El **tipo de cambio real influye** en el turismo, aunque también hay otros factores como los ingresos, las restricciones para viajar, o incluso el clima.
-    """)
+st.markdown("""
+### 🌍 TCR vs Saldo Turístico
+
+Este gráfico compara dos cosas distintas pero relacionadas:
+
+1. La **línea azul** muestra el **TCR** que ya explicamos antes (si Argentina está más barata o más cara que Brasil).
+2. La **línea roja** muestra el **saldo turístico**, que es la diferencia entre:
+   - La cantidad de turistas que ingresan a Argentina.
+   - Y la cantidad de argentinos que viajan al exterior.
+
+Si la línea roja está por debajo de cero, significa que **más argentinos están viajando a Brasil que brasileños viniendo a Argentina**.
+
+---
+
+- Cuando el **TCR sube** (Argentina se vuelve más barata), el saldo turístico mejora: vienen más brasileños o viajan menos argentinos.
+- Cuando el **TCR baja** (Argentina se vuelve más cara), el saldo turístico empeora: se van más argentinos a Brasil y vienen menos turistas brasileños.
+
+Esto sugiere que **el precio relativo entre los dos países influye en las decisiones de viaje**.
+""")
+
     
     # --- Correlación de Pearson ---
     corr_pearson = df_completo[["TCR_indice", "Saldo"]].corr().iloc[0, 1]
-    st.markdown("### 🔗 Correlación de Pearson")
     st.write(f"**Coeficiente de correlación:** {corr_pearson:.3f}")
-    
     # Regresión entre TCR y saldo turístico
     X_tcr = df_completo[["TCR_indice"]].values
     y = df_completo["Saldo"].values
@@ -175,6 +158,17 @@ try:
     y_pred = model.predict(X_tcr)
     r2 = r2_score(y, y_pred)
     rmse = np.sqrt(mean_squared_error(y, y_pred))
+
+    st.markdown("""
+    Hicimos algunos cálculos para ver si esta relación es real:
+    
+    - **Correlación:** 0.555 → Hay una relación moderada: cuando el TCR sube, el saldo turístico mejora.
+    - **Regresión:**  
+      Usamos una fórmula matemática para ver cómo el TCR afecta al saldo turístico:
+      > Saldo = 5122 × TCR − 792880  
+      Esto significa que por cada punto que sube el TCR, el saldo mejora en unas 5.000 personas (en miles).
+    - **R² = 0.308:** Esto quiere decir que un 30% de los cambios en el saldo turístico pueden explicarse por el TCR.
+    - **Error (RMSE):** 216.850 → El modelo no es perfecto, pero ayuda a ver una tendencia general.""")
     
     st.markdown("### 📉 Regresión: Saldo turístico vs TCR")
     st.write(f"**Coeficiente:** {model.coef_[0]:.4f}")
@@ -190,6 +184,20 @@ try:
     ax.set_title("Regresión lineal")
     ax.grid(True)
     st.pyplot(fig3)
+    st.markdown("""El siguiente gráfico muestra esa relación de forma visual, usando puntos azules para cada mes. Cada punto indica:
+    - Cuál fue el TCR en ese mes (eje horizontal).
+    - Cuál fue el saldo turístico correspondiente (eje vertical).
+
+    ---
+    El gráfico confirma que el **Tipo de Cambio Real** tiene una **influencia importante** en el turismo, aunque no es el único factor. El modelo ayuda a ver una tendencia clara: **precios más competitivos traen más turistas**.
+    """)
+
+Además, agregamos una **línea negra** llamada **recta de regresión**, que resume la tendencia general.
+
+- Cuando la línea sube, quiere decir que hay una **relación positiva**: a mayor TCR, mejor saldo turístico.
+- No todos los puntos caen sobre la línea, pero siguen un patrón general ascendente.
+
+Esto confirma que **cuando Argentina se vuelve más barata en comparación con Brasil, mejora el saldo turístico argentino** (vienen más turistas brasileños o se van menos argentinos).
 
 
     st.title("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
