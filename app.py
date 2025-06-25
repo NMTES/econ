@@ -202,6 +202,17 @@ try:
     
     El gráfico confirma que el **Tipo de Cambio Real** tiene una **influencia importante** en el turismo, aunque no es el único factor. El modelo ayuda a ver una tendencia clara: **precios más competitivos traen más turistas**.
     """)
+    st.markdown(""" Además, agregamos una recta de regresión, que resume la tendencia general.
+
+    - Cuando la línea sube, quiere decir que hay una **relación positiva**: a mayor TCR, mejor saldo turístico.
+    - No todos los puntos caen sobre la línea, pero siguen un patrón general ascendente.
+    
+    Esto confirma que **cuando Argentina se vuelve más barata en comparación con Brasil, mejora el saldo turístico argentino** (vienen más turistas o se van menos argentinos).
+    
+    ---
+    
+    El gráfico confirma que el **Tipo de Cambio Real** tiene una **influencia importante** en el turismo, aunque no es el único factor. El modelo ayuda a ver una tendencia clara: **precios más competitivos traen más turistas**.
+    """)
 
     st.title("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
     df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
