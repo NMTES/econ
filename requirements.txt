@@ -4,5 +4,5 @@ numpy
 matplotlib
 seaborn
 scikit-learn
-statsmodels
-scipy
+statsmodels==0.13.5
+scipy==1.10.1
