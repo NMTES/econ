@@ -192,7 +192,7 @@ try:
     """)
 
 
-    st.title("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
+    st.header("📊 Importaciones y Estimador Mensual de Actividad Económica (EMAE)")
     df_raw = pd.read_excel(url_importaciones, header=1, engine="xlrd")
 
     categorias = [
@@ -250,8 +250,20 @@ try:
     ax1.plot(df["Fecha"], df["Piezas_Desest"], label="Piezas Desestacionalizadas")
     ax1.plot(df["Fecha"], df["Consumo_Desest"], label="Consumo Desestacionalizado")
     ax1.set_title("Índices Desestacionalizados (2004-2025)")
+    ax1.legend()
     ax1.grid(True)
     st.pyplot(fig1)
+
+    st.markdown("""
+    
+    Se comparan:
+    
+    - **Importaciones de piezas** (línea azul)
+    - **Importaciones de bienes de consumo** (línea naranja)
+    
+    Ambas líneas tienden a subir cuando la economía crece y a caer en períodos de crisis (por ejemplo, en 2009, 2018 y 2020).  
+    Las importaciones de piezas muestran una respuesta más fuerte a los ciclos económicos, lo que sugiere que están ligadas a la producción.
+    """)
 
     # --- EMAE ---
     df_emae = pd.read_excel(url_emae, skiprows=3, header=None, engine="xlrd")
@@ -283,7 +295,27 @@ try:
     ax2.set_title("Variaciones mensuales desestacionalizadas")
     ax2.axhline(0, color="gray")
     ax2.grid(True)
+    ax2.legend()
     st.pyplot(fig2)
+
+    st.markdown("""#### 📉 Gráfico inferior: Variaciones mensuales desestacionalizadas
+
+    Este gráfico muestra cómo cambian mes a mes las importaciones y el EMAE.  
+    Aunque hay mucha variabilidad, se observa que cuando la economía sube, las importaciones también tienden a subir, y viceversa.
+    
+    ---
+    
+    - 📦 Piezas vs EMAE: **0.284**
+    - 🛒 Consumo vs EMAE: **0.250**
+    
+    Esto indica que existe una **relación positiva**, aunque **no muy fuerte**, entre la actividad económica y las importaciones.
+    
+    ---
+    
+    - Las importaciones tienden a acompañar los ciclos económicos: crecen cuando la economía crece y caen cuando hay recesión.
+    - Las importaciones de **piezas** reaccionan con más fuerza y podrían usarse como **indicador temprano de actividad industrial**.
+    - Las importaciones de consumo también siguen la actividad, pero de forma un poco más dispersa.
+    """)
     
     # --- Indicadores ---
     st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
