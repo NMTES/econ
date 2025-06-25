@@ -434,7 +434,7 @@ try:
     ax10.set_ylabel("Piezas Δ% promedio anual")
     ax10.grid(True)
     ax10.legend()
-    st10.pyplot(fig)
+    st.pyplot(fig)
     
     # Mostrar métricas
     st.markdown(f"**R² Ridge (Piezas vs EMAE):** {r2_ridge_piezas:.3f}")
