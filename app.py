@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge, Lasso
 from sklearn.metrics import mean_squared_error, r2_score
 
 st.title("Analisis de TCR, TURISMO e IMPORTACIONES.")
@@ -327,7 +328,7 @@ try:
     x_vals = np.linspace(X_piezas.min(), X_piezas.max(), 100)
     y_pred = coef_piezas * x_vals + intercepto_piezas
     ax3.plot(x_vals, y_pred, color="black", label="Recta de regresión")
-    ax3.set_title("Regresión: Piezas Δ% vs EMAE Δ%")
+    ax3.set_title("Regresión: Piezas y accesorios Δ% vs EMAE Δ%")
     ax3.set_xlabel("EMAE Δ%")
     ax3.set_ylabel("Piezas Δ%")
     ax3.grid(True)
@@ -340,7 +341,7 @@ try:
     ax4.plot(x_vals, y_pred, color="black", label="Recta de regresión")
     ax4.set_title("Regresión: Bienes de consumo Δ% vs EMAE Δ%")
     ax4.set_xlabel("EMAE Δ%")
-    ax4.set_ylabel("Bienes de consumo Δ%")
+    ax4.set_ylabel("Bienes Δ%")
     ax4.grid(True)
     st.pyplot(fig4)
 
@@ -362,7 +363,7 @@ try:
     fig5, ax5 = plt.subplots(figsize=(8, 4))
     ax5.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
     ax5.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
-    ax5.plot(df_anual["Año"], df_anual["Var_Consumo_Desest"], label="Consumo Δ% anual")
+    ax5.plot(df_anual["Año"], df_anual["Var_Consumo_Desest"], label="Bienes Δ% anual")
     ax5.axhline(0, color="gray")
     ax5.grid(True)
     ax5.legend()
@@ -413,21 +414,50 @@ try:
     fig6, ax6 = plt.subplots(figsize=(6, 5))
     ax6.scatter(X_piezas_anual, y_piezas_anual, color="dodgerblue", alpha=0.7, label="Datos anuales")
     ax6.plot(X_piezas_anual, pred_piezas_anual, color="black", label="Regresión")
-    ax6.set_title("📈 Regresión anual: Piezas Δ% vs EMAE Δ%")
-    ax6.set_xlabel("EMAE Δ% promedio anual")
-    ax6.set_ylabel("Piezas Δ% promedio anual")
-    ax6.legend()
+    ax6.set_title("Regresión anual: Piezas y accesorios Δ% vs EMAE Δ%")
+    ax6.set_xlabel("EMAE Δ%")
+    ax6.set_ylabel("Piezas Δ%")
     st.pyplot(fig6)
     
     # Gráfico de dispersión con línea de regresión: Consumo
     fig7, ax7 = plt.subplots(figsize=(6, 5))
     ax7.scatter(X_consumo_anual, y_consumo_anual, color="darkorange", alpha=0.7, label="Datos anuales")
     ax7.plot(X_consumo_anual, pred_consumo_anual, color="black", label="Regresión")
-    ax7.set_title("📈 Regresión anual: Consumo Δ% vs EMAE Δ%")
-    ax7.set_xlabel("EMAE Δ% promedio anual")
-    ax7.set_ylabel("Consumo Δ% promedio anual")
-    ax7.legend()
+    ax7.set_title("Regresión anual: Bienes de consumo Δ% vs EMAE Δ%")
+    ax7.set_xlabel("EMAE Δ%")
+    ax7.set_ylabel("Bienes Δ%")
     st.pyplot(fig7)
+
+
+    
+    # RIDGE - Piezas vs EMAE
+    ridge_piezas = Ridge(alpha=1.0)  # podés ajustar alpha
+    ridge_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
+    pred_ridge_piezas = ridge_piezas.predict(df_anual[["Var_EMAE"]])
+    r2_ridge_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_ridge_piezas)
+    rmse_ridge_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_ridge_piezas) ** 0.5
+    
+    # LASSO - Piezas vs EMAE (opcional)
+    lasso_piezas = Lasso(alpha=0.1)
+    lasso_piezas.fit(df_anual[["Var_EMAE"]], df_anual["Var_Piezas_Desest"])
+    pred_lasso_piezas = lasso_piezas.predict(df_anual[["Var_EMAE"]])
+    r2_lasso_piezas = r2_score(df_anual["Var_Piezas_Desest"], pred_lasso_piezas)
+    rmse_lasso_piezas = mean_squared_error(df_anual["Var_Piezas_Desest"], pred_lasso_piezas) ** 0.5
+    
+    # RIDGE - Consumo vs EMAE
+    ridge_consumo = Ridge(alpha=1.0)
+    ridge_consumo.fit(df_anual[["Var_EMAE"]], df_anual["Var_Consumo_Desest"])
+    pred_ridge_consumo = ridge_consumo.predict(df_anual[["Var_EMAE"]])
+    r2_ridge_consumo = r2_score(df_anual["Var_Consumo_Desest"], pred_ridge_consumo)
+    rmse_ridge_consumo = mean_squared_error(df_anual["Var_Consumo_Desest"], pred_ridge_consumo) ** 0.5
+    
+    # LASSO - Consumo vs EMAE (opcional)
+    lasso_consumo = Lasso(alpha=0.1)
+    lasso_consumo.fit(df_anual[["Var_EMAE"]], df_anual["Var_Consumo_Desest"])
+    pred_lasso_consumo = lasso_consumo.predict(df_anual[["Var_EMAE"]])
+    r2_lasso_consumo = r2_score(df_anual["Var_Consumo_Desest"], pred_lasso_consumo)
+    rmse_lasso_consumo = mean_squared_error(df_anual["Var_Consumo_Desest"], pred_lasso_consumo) ** 0.5
+
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
