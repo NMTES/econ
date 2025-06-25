@@ -371,7 +371,7 @@ try:
     # --- Correlación anual ---
     st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
     st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
-    st.markdown("""¿Qué pasa cuando miramos el promedio por año?
+    st.markdown(""" ¿Qué pasa cuando miramos el promedio por año?
     En este gráfico observamos el **promedio anual de las variaciones mensuales** desestacionalizadas del EMAE (línea negra), las importaciones de piezas (línea azul) y las importaciones de bienes de consumo (línea naranja).
     
     Cuando pasamos de mirar datos mensuales a **promedios anuales**, notamos un cambio importante:
