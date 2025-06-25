@@ -347,17 +347,9 @@ try:
     st.write(f"📊 Correlación mensual (Piezas vs EMAE): {corr_piezas:.3f}")
     st.write(f"📊 Correlación mensual (Consumo vs EMAE): {corr_consumo:.3f}")
 
-    st.markdown("""
-    ### 📊 ¿Qué nos dicen estas correlaciones?
-    
-    Los resultados muestran una **correlación mensual de 0.284 entre las importaciones de piezas y el EMAE**, y una **correlación de 0.250 entre las importaciones de consumo y el EMAE**. 
-    
-    Esto significa que existe una **relación positiva, aunque débil, entre el nivel de actividad económica y las importaciones**. En otras palabras, cuando la economía mejora —aunque sea de forma moderada—, las empresas suelen aumentar sus compras de productos importados, especialmente de piezas que se utilizan como insumos o maquinaria para la producción. Lo mismo ocurre, aunque en menor medida, con los bienes de consumo.
-    
+    st.markdown("""Esto significa que existe una **relación positiva, aunque débil, entre el nivel de actividad económica y las importaciones**. En otras palabras, cuando la economía mejora —aunque sea de forma moderada—, las empresas suelen aumentar sus compras de productos importados, especialmente de piezas que se utilizan como insumos o maquinaria para la producción. Lo mismo ocurre, aunque en menor medida, con los bienes de consumo.
     Sin embargo, la dispersión de los datos indica que **el EMAE no es el único factor que explica las importaciones**. Muchos puntos se alejan de la tendencia general, lo cual sugiere que también influyen otros elementos como las restricciones comerciales, la evolución del tipo de cambio, la política económica, la disponibilidad de divisas o incluso las expectativas del sector privado.
-    
     Por lo tanto, si bien puede decirse que las importaciones tienden a acompañar el ciclo económico —crecen en los períodos de expansión y caen en las recesiones—, **la relación está lejos de ser perfecta**, y no sería correcto pensar que se puede anticipar el comportamiento de las importaciones solo observando el EMAE.
-    
     Estas correlaciones nos ayudan a entender que hay una conexión entre ambos fenómenos, pero también nos recuerdan que la economía real es más compleja y está influida por múltiples variables al mismo tiempo.
     """)
 
@@ -366,22 +358,68 @@ try:
     df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
     corr_piezas_anual = df_anual[["Var_Piezas_Desest", "Var_EMAE"]].corr().iloc[0, 1]
     corr_consumo_anual = df_anual[["Var_Consumo_Desest", "Var_EMAE"]].corr().iloc[0, 1]
-    fig4, ax4 = plt.subplots(figsize=(8, 4))
-    ax4.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
-    ax4.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
-    ax4.plot(df_anual["Año"], df_anual["Var_Consumo_Desest"], label="Consumo Δ% anual")
-    ax4.axhline(0, color="gray")
-    ax4.grid(True)
-    ax4.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
-    st.pyplot(fig4)
+    fig5, ax5 = plt.subplots(figsize=(8, 4))
+    ax5.plot(df_anual["Año"], df_anual["Var_EMAE"], label="EMAE Δ% anual", color="black")
+    ax5.plot(df_anual["Año"], df_anual["Var_Piezas_Desest"], label="Piezas Δ% anual")
+    ax5.plot(df_anual["Año"], df_anual["Var_Consumo_Desest"], label="Consumo Δ% anual")
+    ax5.axhline(0, color="gray")
+    ax5.grid(True)
+    ax5.legend()
+    ax5.set_title("Variaciones mensuales desestacionalizadas - promedio anual")
+    st.pyplot(fig5)
     
     # --- Correlación anual ---
     st.write(f"📊 Correlación ANUAL (Piezas vs EMAE): {corr_piezas_anual:.3f}")
     st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
-    st.markdown("""¿Qué nos dice esto?
-    Hay una relación positiva débil pero consistente: cuando la economía mejora (aunque sea poco), las empresas probablemente aumentan sus compras de piezas importadas (para maquinaria, insumos, repuestos, etc.).
-    El hecho de que muchos puntos estén dispersos también sugiere que hay otros factores que afectan las importaciones además del EMAE (por ejemplo, restricciones a las importaciones, tipo de cambio, expectativas, etc.).
+    st.markdown("""¿Qué pasa cuando miramos el promedio por año?
+    
+    En este gráfico observamos el **promedio anual de las variaciones mensuales** desestacionalizadas del EMAE (línea negra), las importaciones de piezas (línea azul) y las importaciones de bienes de consumo (línea naranja).
+    
+    Cuando pasamos de mirar datos mensuales a **promedios anuales**, notamos un cambio importante:  
+    - La **correlación entre piezas y EMAE sube a 0.628**
+    - La **correlación entre consumo y EMAE sube a 0.478**
+    
+    Esto se debe a que los datos mensuales suelen estar llenos de "ruido": pequeños saltos, efectos estacionales residuales, shocks puntuales o decisiones empresariales que no reflejan tendencias reales.  
+    Al promediar los datos por año, ese ruido se reduce, y lo que queda es una **relación más clara entre la economía y las importaciones**.
+    
+    - En otras palabras: **cuando la economía crece sostenidamente a lo largo del año, las importaciones también lo hacen**.
+    - Esto es especialmente evidente en el caso de las **importaciones de piezas**, que parecen seguir de cerca el ritmo del ciclo económico.
+    
+    Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa,  
+    **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual.
+    
+    Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
+
+    # --- Repetimos el agrupamiento por año si no está antes ---
+    df_merged["Año"] = df_merged["Fecha"].dt.year
+    df_anual = df_merged.groupby("Año")[["Var_EMAE", "Var_Piezas_Desest", "Var_Consumo_Desest"]].mean().reset_index()
+    
+    # --- Regresión EMAE vs Piezas ---
+    X_piezas = sm.add_constant(df_anual["Var_EMAE"])
+    y_piezas = df_anual["Var_Piezas_Desest"]
+    modelo_piezas = sm.OLS(y_piezas, X_piezas).fit()
+    
+    # --- Regresión EMAE vs Consumo ---
+    X_consumo = sm.add_constant(df_anual["Var_EMAE"])
+    y_consumo = df_anual["Var_Consumo_Desest"]
+    modelo_consumo = sm.OLS(y_consumo, X_consumo).fit()
+    
+    # --- Gráfico regresión Piezas ---
+    fig6, ax6 = plt.subplots(figsize=(6, 5))
+    sns.regplot(x="Var_EMAE", y="Var_Piezas_Desest", data=df_anual, ax=ax6, color="dodgerblue", line_kws={"color": "black"})
+    ax6.set_title("📈 Regresión anual: Piezas Δ% vs EMAE Δ%")
+    ax6.set_xlabel("EMAE Δ% promedio anual")
+    ax6.set_ylabel("Piezas Δ% promedio anual")
+    st.pyplot(fig6)
+    
+    # --- Gráfico regresión Consumo ---
+    fig7, ax7 = plt.subplots(figsize=(6, 5))
+    sns.regplot(x="Var_EMAE", y="Var_Consumo_Desest", data=df_anual, ax=ax7, color="darkorange", line_kws={"color": "black"})
+    ax7.set_title("📈 Regresión anual: Consumo Δ% vs EMAE Δ%")
+    ax7.set_xlabel("EMAE Δ% promedio anual")
+    ax7.set_ylabel("Consumo Δ% promedio anual")
+    st.pyplot(fig7)
 
 except Exception as e:
     st.error(f"Ocurrió un error al cargar los datos: {e}")
