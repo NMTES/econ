@@ -373,16 +373,17 @@ try:
     st.write(f"📊 Correlación ANUAL (Consumo vs EMAE): {corr_consumo_anual:.3f}")
     st.markdown("""¿Qué pasa cuando miramos el promedio por año?
     En este gráfico observamos el **promedio anual de las variaciones mensuales** desestacionalizadas del EMAE (línea negra), las importaciones de piezas (línea azul) y las importaciones de bienes de consumo (línea naranja).
-    Cuando pasamos de mirar datos mensuales a **promedios anuales**, notamos un cambio importante:  
+    
+    Cuando pasamos de mirar datos mensuales a **promedios anuales**, notamos un cambio importante:
     - La **correlación entre piezas y EMAE sube a 0.628**
     - La **correlación entre consumo y EMAE sube a 0.478**
+    
     Esto se debe a que los datos mensuales suelen estar llenos de "ruido": pequeños saltos, efectos estacionales residuales, shocks puntuales o decisiones empresariales que no reflejan tendencias reales.  
     Al promediar los datos por año, ese ruido se reduce, y lo que queda es una **relación más clara entre la economía y las importaciones**.
     - En otras palabras: **cuando la economía crece sostenidamente a lo largo del año, las importaciones también lo hacen**.
     - Esto es especialmente evidente en el caso de las **importaciones de piezas**, que parecen seguir de cerca el ritmo del ciclo económico.
-    Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa,  
-    **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual.
-    Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
+    
+    Este gráfico confirma que, aunque en el corto plazo (mes a mes) la relación entre actividad e importaciones puede ser débil o dispersa, **a lo largo del tiempo la conexión se vuelve más fuerte**: las importaciones tienden a acompañar el crecimiento económico de manera bastante consistente cuando se analiza en escala anual. Por eso, las correlaciones anuales más altas no solo son estadísticas: **nos dicen que las decisiones de importar responden a las condiciones económicas generales, no solo a movimientos puntuales**.
     """)
 
     # --- Repetimos el agrupamiento por año si no está antes ---
